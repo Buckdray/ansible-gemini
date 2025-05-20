@@ -4,7 +4,7 @@ import subprocess
 import google.generativeai as genai
 
 # === Configuration ===
-PACKAGE = "curl"
+PACKAGE = "open-vm-tools"
 ANSIBLE_CHECK_SCRIPT = "check_and_simulate.yml"
 ANSIBLE_UPGRADE_SCRIPT = "upgrade_package.yml"
 OUTPUT_DIR = "."  # or use a dedicated output path if desired
