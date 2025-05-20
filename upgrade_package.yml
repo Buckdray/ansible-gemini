@@ -1,0 +1,45 @@
+---
+- name: Upgrade specific package safely
+  hosts: all
+  become: yes
+  gather_facts: yes
+  vars:
+    package: "{{ package }}"
+  tasks:
+
+    - name: Ensure apt cache is updated
+      apt:
+        update_cache: yes
+
+    - name: Check if package is installed
+      command: dpkg -s "{{ package }}"
+      register: check_package
+      failed_when: false
+      changed_when: false
+
+    - name: Fail if package is not installed
+      fail:
+        msg: "Package '{{ package }}' is not installed on {{ inventory_hostname }}."
+      when: check_package.rc != 0
+
+    - name: Upgrade package to latest version
+      apt:
+        name: "{{ package }}"
+        state: latest
+      register: upgrade_result
+
+    - name: Debug package upgrade result
+      debug:
+        var: upgrade_result
+
+    - name: Check if upgrade affected the kernel
+      shell: "dpkg -l | grep -i {{ package }} | grep -i linux-image"
+      register: kernel_check
+      changed_when: false
+      failed_when: false
+
+    - name: Reboot if a kernel package was updated
+      reboot:
+        reboot_timeout: 600
+        msg: "Reboot triggered due to kernel update."
+      when: kernel_check.stdout != ""

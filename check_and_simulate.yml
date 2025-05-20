@@ -1,0 +1,45 @@
+
+---
+- name: Check if a package is installed and simulate upgrade remotely
+  hosts: all
+  become: yes
+  vars:
+    package_name: "curl"  # Override using -e "package_name=your_package"
+  tasks:
+    - name: Check if package is installed
+      shell: "dpkg -l | grep -w {{ package_name }}"
+      register: package_check
+      ignore_errors: yes
+
+    - name: Display package installation status
+      debug:
+        msg: >-
+          {% if package_check.rc == 0 %}
+            Package '{{ package_name }}' is installed.
+          {% else %}
+            Package '{{ package_name }}' is NOT installed.
+          {% endif %}
+
+    - name: Simulate upgrade of the package if installed
+      shell: "apt-get --simulate install {{ package_name }}"
+      when: package_check.rc == 0
+      register: sim_output
+
+    - name: Save simulation output to local file
+      delegate_to: localhost
+      copy:
+        content: "{{ sim_output.stdout }}"
+        dest: "./simulate_output_{{ inventory_hostname }}.txt"
+      when: package_check.rc == 0
+
+    - name: Get reverse dependencies of the package if installed
+      shell: "apt rdepends {{ package_name }}"
+      when: package_check.rc == 0
+      register: rdepends_output
+
+    - name: Save rdepends output to local file
+      delegate_to: localhost
+      copy:
+        content: "{{ rdepends_output.stdout }}"
+        dest: "./rdepends_output_{{ inventory_hostname }}.txt"
+      when: package_check.rc == 0
