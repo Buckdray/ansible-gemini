@@ -62,7 +62,9 @@ def prompt_user_and_apply(package):
 # === Main Flow ===
 if __name__ == "__main__":
     run_ansible_check(PACKAGE)
-
+    print(SIM_OUTPUT_FILE)
+    print(RDEPENDS_FILE)
+    print("****&&*&&*&*&")
     if os.path.exists(SIM_OUTPUT_FILE) and os.path.exists(RDEPENDS_FILE):
         sim_output, rdepends_output = load_outputs()
         print("[+] Running Gemini risk analysis...")
@@ -71,6 +73,4 @@ if __name__ == "__main__":
         print(report)
         prompt_user_and_apply(PACKAGE)
     else:
-        print(SIM_OUTPUT_FILE)
-        print(RDEPENDS_FILE)
         print("[!] Simulation or dependency output missing. Aborting.")
