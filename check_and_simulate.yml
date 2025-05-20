@@ -40,6 +40,7 @@
 
     - name: Save rdepends output to local file
       delegate_to: localhost
+      become: no
       copy:
         content: "{{ rdepends_output.stdout }}"
         dest: "./rdepends_output_{{ inventory_hostname }}.txt"
