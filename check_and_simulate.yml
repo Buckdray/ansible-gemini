@@ -27,6 +27,7 @@
 
     - name: Save simulation output to local file
       delegate_to: localhost
+      become: no
       copy:
         content: "{{ sim_output.stdout }}"
         dest: "./simulate_output_{{ inventory_hostname }}.txt"
