@@ -53,7 +53,7 @@ Analyze the following outputs to evaluate risks in upgrading a package.
 ### Reverse Dependencies:
 {rdepends_output}
 """
-    model = genai.GenerativeModel("models/gemini-1.5-pro")
+    model = genai.GenerativeModel("models/gemini-2.0-flash")
     response = model.generate_content(prompt)
     return response.text
 
