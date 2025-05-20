@@ -10,6 +10,7 @@ RDEPENDS_FILE = f"rdepends_output_{HOSTNAME}.txt"
 ANSIBLE_CHECK_SCRIPT = "check_and_simulate.yml"
 ANSIBLE_UPGRADE_SCRIPT = "upgrade_package.yml"
 
+print(SIM_OUTPUT_FILE,"this is the original")
 # === Step 1: Run Ansible Simulation & Checks ===
 def run_ansible_check(package):
     print(f"[+] Running Ansible to check/install/simulate for: {package}")
@@ -62,8 +63,6 @@ def prompt_user_and_apply(package):
 # === Main Flow ===
 if __name__ == "__main__":
     run_ansible_check(PACKAGE)
-    print(SIM_OUTPUT_FILE)
-    print(RDEPENDS_FILE)
     print("****&&*&&*&*&")
     if os.path.exists(SIM_OUTPUT_FILE) and os.path.exists(RDEPENDS_FILE):
         sim_output, rdepends_output = load_outputs()
