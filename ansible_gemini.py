@@ -10,13 +10,15 @@ RDEPENDS_FILE = f"rdepends_output_{HOSTNAME}.txt"
 ANSIBLE_CHECK_SCRIPT = "check_and_simulate.yml"
 ANSIBLE_UPGRADE_SCRIPT = "upgrade_package.yml"
 
-print(SIM_OUTPUT_FILE,"this is the original")
+
 # === Step 1: Run Ansible Simulation & Checks ===
 def run_ansible_check(package):
     print(f"[+] Running Ansible to check/install/simulate for: {package}")
     subprocess.run([
         "ansible-playbook", ANSIBLE_CHECK_SCRIPT, "-e", f"package_name={package}"
     ])
+    print(SIM_OUTPUT_FILE,"this is the original")
+    print(RDEPENDS_FILE,"this is the original")
 
 # === Step 2: Load Results from Files ===
 def load_outputs():
